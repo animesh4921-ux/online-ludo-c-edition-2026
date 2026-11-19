@@ -18,6 +18,17 @@ int main(void) {
     /* Safe square protection: Red step 13 maps to absolute 0. */
     g.current=0;g.player[0].token[0]=(LudoToken){TOKEN_TRACK,11};g.player[1].token[0]=(LudoToken){TOKEN_TRACK,0};
     assert(ludo_roll(&g,2)==2);assert(ludo_move(&g,0));assert(g.player[1].token[0].state==TOKEN_TRACK);
+    /* Home-lane steps are off the shared track and must never cause captures. */
+    g.current=0;g.player[0].token[0]=(LudoToken){TOKEN_TRACK,50};
+    g.player[1].token[0]=(LudoToken){TOKEN_TRACK,54};
+    assert(ludo_roll(&g,1)==1);assert(ludo_move(&g,0));
+    assert(g.player[0].token[0].step==51);
+    assert(g.player[1].token[0].state==TOKEN_TRACK&&g.player[1].token[0].step==54);
+    g.current=0;g.player[0].token[0]=(LudoToken){TOKEN_TRACK,52};
+    g.player[1].token[0]=(LudoToken){TOKEN_TRACK,55};
+    assert(ludo_roll(&g,1)==1);assert(ludo_move(&g,0));
+    assert(g.player[0].token[0].step==53);
+    assert(g.player[1].token[0].state==TOKEN_TRACK&&g.player[1].token[0].step==55);
     /* Base exits without a six; exact finish, ranking and skipping are enforced. */
     g.current=0;g.player[0].token[0]=(LudoToken){TOKEN_FINISHED,56};g.player[0].token[1]=(LudoToken){TOKEN_TRACK,54};
     assert(ludo_roll(&g,2)==2);assert(ludo_move(&g,1));assert(g.player[0].done&&g.player[0].rank==1);assert(g.current==1);

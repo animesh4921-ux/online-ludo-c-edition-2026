@@ -48,7 +48,8 @@ bool ludo_move(LudoRoom *g,int ti) {
     bool captured=false;
     if(t->state==TOKEN_TRACK) {
         int square=ludo_track_square(p,t->step);
-        if(!ludo_safe_square(square)) for(int q=0;q<g->count;q++) if(q!=p)
+        /* Home-lane steps are not on the shared track; track_square returns -1. */
+        if(square>=0&&!ludo_safe_square(square)) for(int q=0;q<g->count;q++) if(q!=p)
             for(int k=0;k<LUDO_TOKENS;k++) { LudoToken *o=&g->player[q].token[k];
                 if(o->state==TOKEN_TRACK&&ludo_track_square(q,o->step)==square) { o->state=TOKEN_BASE;o->step=0;captured=true; }
             }

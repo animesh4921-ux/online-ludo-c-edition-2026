@@ -1,0 +1,6 @@
+.git
+backend/build
+backend/*.exe
+backend/*.obj
+backend/ludo_server
+backend/ludo-test
